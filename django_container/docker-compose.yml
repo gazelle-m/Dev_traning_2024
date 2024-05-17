@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:14.12
+    environment:
+      POSTGRES_DB: django_db
+      POSTGRES_USER: django
+      POSTGRES_PASSWORD: djangosecret
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8080
+    # command: tail -f 
+    volumes:
+      - ./django_app/dj_firstProject:/app
+    ports:
+      - "8080:8080"
+
+    depends_on:
+      - db
+    environment:
+      - DATABASE_NAME=django_db
+      - DATABASE_USER=django
+      - DATABASE_PASSWORD=djangosecret
+      - DATABASE_HOST=db
+
